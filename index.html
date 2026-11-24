@@ -77,7 +77,7 @@
           <article class="panel import-card">
             <div class="eyebrow">BRING YOUR HISTORY HOME</div><h2>Import Spotify data</h2>
             <p class="muted">Choose the JSON files from Spotify's Extended Streaming History export. You can select multiple files at once.</p>
-            <label class="dropzone" id="dropzone"><input id="file-input" type="file" accept=".json,application/json" multiple><span class="upload-icon">↑</span><strong>Drop JSON files here</strong><span>or tap to browse your device</span><small>Spotify extended streaming history · JSON</small></label>
+            <div class="dropzone" id="dropzone"><input id="file-input" type="file" accept=".json,application/json" multiple><label class="file-picker" for="file-input"><span class="upload-icon">↑</span><strong>Choose Spotify JSON files</strong><span>Tap to browse your device, or drop files here</span><small>Multiple files supported · JSON only</small></label></div>
             <div id="import-status" class="status muted">Your existing data will be merged. Duplicate records are ignored.</div>
             <div class="steps"><strong>Where to get your data</strong><ol><li>Open <a href="https://www.spotify.com/account/privacy/" target="_blank" rel="noreferrer">Spotify Privacy settings</a>.</li><li>Request <b>Extended streaming history</b>.</li><li>Download and unzip the export.</li><li>Select all <code>Streaming_History_Audio_*.json</code> files here.</li></ol></div>
           </article>
