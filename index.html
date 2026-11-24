@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101014">
+  <meta name="description" content="Private personal music analytics from your Spotify listening history.">
+  <title>Ambar.fm</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">a.</span><span>ambar<span class="brand-dot">.</span>fm</span></a>
+      <div class="side-label">YOUR LIBRARY</div>
+      <button class="nav active" data-view="overview">◫ <span>Overview</span></button>
+      <button class="nav" data-view="tracks">♫ <span>Top tracks</span></button>
+      <button class="nav" data-view="artists">♬ <span>Artists</span></button>
+      <button class="nav" data-view="albums">▤ <span>Albums</span></button>
+      <button class="nav" data-view="history">◷ <span>Listening history</span></button>
+      <div class="sidebar-bottom">
+        <div class="privacy"><span class="green-dot"></span> Your data stays on this device</div>
+        <button class="nav" data-view="import">＋ <span>Import Spotify data</span></button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow">YOUR PERSONAL MUSIC UNIVERSE</div><h1 id="page-title">Overview</h1></div>
+        <div class="top-actions">
+          <span class="local-pill"><span class="green-dot"></span> LOCAL MODE</span>
+          <button class="button button-outline" id="import-top">＋ Import data</button>
+        </div>
+      </header>
+
+      <section id="empty-state" class="empty-state">
+        <div class="empty-icon">♫</div>
+        <div class="eyebrow">WELCOME TO YOUR SOUNDTRACK</div>
+        <h2>Your listening story starts here.</h2>
+        <p>Import your Spotify Extended Streaming History to unlock your personal stats, top artists, albums, tracks and timeline.</p>
+        <button class="button button-primary" id="start-import">Import Spotify history <span>→</span></button>
+        <div class="hint">Spotify account → Privacy settings → Download your data → Extended streaming history</div>
+      </section>
+
+      <section id="dashboard" class="hidden">
+        <div class="welcome-row">
+          <div><div class="eyebrow">ALL-TIME LISTENING</div><h2>Your music, measured.</h2><p id="date-range" class="muted">Based on your imported Spotify history</p></div>
+          <select id="period-filter" class="select"><option value="all">All time</option><option value="year">This year</option><option value="month">This month</option><option value="30">Last 30 days</option><option value="7">Last 7 days</option></select>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-label">LISTENING TIME</div><div class="stat-value" id="total-time">0h</div><div class="stat-foot" id="total-minutes">0 minutes played</div></article>
+          <article class="stat-card"><div class="stat-label">TOTAL PLAYS</div><div class="stat-value" id="total-plays">0</div><div class="stat-foot">Track listening events</div></article>
+          <article class="stat-card"><div class="stat-label">UNIQUE TRACKS</div><div class="stat-value" id="unique-tracks">0</div><div class="stat-foot">Different songs discovered</div></article>
+          <article class="stat-card"><div class="stat-label">UNIQUE ARTISTS</div><div class="stat-value" id="unique-artists">0</div><div class="stat-foot">Artists in your library</div></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel chart-panel"><div class="panel-head"><div><div class="eyebrow">YOUR LISTENING RHYTHM</div><h3>Listening over time</h3></div><span class="panel-note">Hours / day</span></div><div id="activity-chart" class="chart"></div></article>
+          <article class="panel"><div class="panel-head"><div><div class="eyebrow">ON REPEAT</div><h3>Top artists</h3></div><button class="text-button" data-go="artists">See all →</button></div><div id="top-artists" class="rank-list"></div></article>
+        </div>
+        <div class="content-grid lower-grid">
+          <article class="panel"><div class="panel-head"><div><div class="eyebrow">YOUR ROTATION</div><h3>Top tracks</h3></div><button class="text-button" data-go="tracks">See all →</button></div><div id="top-tracks" class="rank-list"></div></article>
+          <article class="panel"><div class="panel-head"><div><div class="eyebrow">FULL-LENGTH FAVOURITES</div><h3>Top albums</h3></div><button class="text-button" data-go="albums">See all →</button></div><div id="top-albums" class="rank-list"></div></article>
+        </div>
+      </section>
+
+      <section id="list-view" class="hidden">
+        <div class="panel list-panel">
+          <div class="list-toolbar"><input id="list-search" class="search" placeholder="Search your music…" type="search"><span id="list-count" class="muted"></span></div>
+          <div id="list-content"></div>
+        </div>
+      </section>
+
+      <section id="import-view" class="hidden">
+        <div class="import-layout">
+          <article class="panel import-card">
+            <div class="eyebrow">BRING YOUR HISTORY HOME</div><h2>Import Spotify data</h2>
+            <p class="muted">Choose the JSON files from Spotify's Extended Streaming History export. You can select multiple files at once.</p>
+            <label class="dropzone" id="dropzone"><input id="file-input" type="file" accept=".json,application/json" multiple><span class="upload-icon">↑</span><strong>Drop JSON files here</strong><span>or tap to browse your device</span><small>Spotify extended streaming history · JSON</small></label>
+            <div id="import-status" class="status muted">Your existing data will be merged. Duplicate records are ignored.</div>
+            <div class="steps"><strong>Where to get your data</strong><ol><li>Open <a href="https://www.spotify.com/account/privacy/" target="_blank" rel="noreferrer">Spotify Privacy settings</a>.</li><li>Request <b>Extended streaming history</b>.</li><li>Download and unzip the export.</li><li>Select all <code>Streaming_History_Audio_*.json</code> files here.</li></ol></div>
+          </article>
+          <article class="panel info-card"><div class="eyebrow">WHAT GETS IMPORTED</div><h3>Your listening, not your identity.</h3><ul><li>Track, artist and album names</li><li>Listening date and duration</li><li>Spotify track URI when available</li><li>Playback context where provided</li></ul><div class="privacy-note"><span class="green-dot"></span><div><b>Private by design</b><p>Imported data is stored in this browser on this device. It is not uploaded to a server.</p></div></div><button id="clear-data" class="button button-danger">Clear all imported data</button></article>
+        </div>
+      </section>
+      <footer>AMBAR.FM <span>•</span> BUILT FOR ONE LISTENER. YOURS.</footer>
+    </main>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
