@@ -66,8 +66,24 @@ function render(){
   if(isList)renderList();
 }
 function setView(view){if(!['overview','tracks','artists','albums','history','import'].includes(view))return;currentView=view;document.querySelectorAll('.nav[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const names={overview:'Overview',tracks:'Top tracks',artists:'Artists',albums:'Albums',history:'Listening history',import:'Import Spotify data'};$('page-title').textContent=names[view];render();window.scrollTo({top:0,behavior:'smooth'});}
-// Delegated clicks are resilient to layout changes and mobile navigation.
-document.addEventListener('click',e=>{const nav=e.target.closest('[data-view]');if(nav){e.preventDefault();setView(nav.dataset.view);return;}const go=e.target.closest('[data-go]');if(go){e.preventDefault();setView(go.dataset.go);}});
+// Bind navigation directly as well as delegating clicks. This is reliable
+// across desktop sidebar and the compact mobile navigation.
+function bindNavigation(){
+  document.querySelectorAll('[data-view]').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      setView(button.dataset.view);
+    });
+  });
+  document.querySelectorAll('[data-go]').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.preventDefault();
+      setView(button.dataset.go);
+    });
+  });
+}
+bindNavigation();
 $('import-top').addEventListener('click',()=>setView('import'));
 $('start-import').addEventListener('click',()=>setView('import'));
 $('file-input').addEventListener('change',e=>{if(e.target.files&&e.target.files.length)importFiles(e.target.files);e.target.value='';});
@@ -76,4 +92,4 @@ $('dropzone').addEventListener('dragleave',()=>$('dropzone').classList.remove('d
 $('dropzone').addEventListener('drop',e=>{e.preventDefault();$('dropzone').classList.remove('drag');importFiles([...e.dataTransfer.files]);});
 $('period-filter').addEventListener('change',e=>{currentPeriod=e.target.value;renderOverview();});$('list-search').addEventListener('input',renderList);
 $('clear-data').addEventListener('click',async()=>{if(confirm('Permanently clear all imported listening data from this browser?')){await clearAll();allEvents=[];setView('overview');$('import-status').textContent='All local listening data has been cleared.';}});
-(async()=>{try{allEvents=await getAll();}catch(err){console.error(err);const status=$('import-status');status.textContent='Local storage could not be opened in this browser. Try the latest Chrome version.';}render();if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(console.warn);})();
+(async()=>{try{allEvents=await getAll();}catch(err){console.error(err);const status=$('import-status');if(status)status.textContent='Local storage could not be opened in this browser. Try the latest Chrome version.';}try{render();}catch(err){console.error('Ambar.fm render error:',err);const title=$('page-title');if(title)title.textContent='Ambar.fm needs a refresh';}if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(console.warn);})();
