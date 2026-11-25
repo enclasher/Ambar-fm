@@ -1,17 +1,1 @@
-{
-  "name": "Ambar.fm",
-  "short_name": "Ambar.fm",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#101014",
-  "theme_color": "#101014",
-  "description": "Your personal music analytics",
-  "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
-}
+{"name":"ambar.fm","short_name":"ambar.fm","start_url":"./","display":"standalone","background_color":"#101014","theme_color":"#101014","icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
